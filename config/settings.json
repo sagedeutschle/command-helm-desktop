@@ -1,0 +1,22 @@
+{
+  "workbench.colorTheme": "Vexillum",
+  "workbench.startupEditor": "none",
+  "commandHelm.welcome.openOnStartup": true,
+  "telemetry.telemetryLevel": "off",
+  "workbench.enableExperiments": false,
+  "update.mode": "none",
+  "extensions.autoUpdate": false,
+  "extensions.autoCheckUpdates": false,
+  "extensions.ignoreRecommendations": true,
+  "security.workspace.trust.enabled": true,
+  "security.workspace.trust.untrustedFiles": "prompt",
+  "terminal.integrated.enableMultiLinePasteWarning": "always",
+  "git.autofetch": false,
+  "npm.fetchOnlinePackageInfo": false,
+  "typescript.disableAutomaticTypeAcquisition": true,
+  "editor.minimap.enabled": false,
+  "editor.guides.bracketPairs": "active",
+  "editor.linkedEditing": true,
+  "workbench.secondarySideBar.defaultVisibility": "hidden",
+  "terminal.integrated.tabs.enabled": true
+}

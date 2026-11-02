@@ -1,0 +1,32 @@
+{
+  "name": "vexillum",
+  "displayName": "Vexillum",
+  "description": "Command Helm's red-and-black high-contrast color theme \u2014 pure black surfaces, crimson borders and accents, blue selection, full ANSI terminal palette.",
+  "version": "1.0.0",
+  "publisher": "command-helm",
+  "private": false,
+  "engines": {
+    "vscode": "^1.126.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "keywords": [
+    "theme",
+    "color-theme",
+    "high-contrast",
+    "dark",
+    "vexillum",
+    "command-helm"
+  ],
+  "contributes": {
+    "themes": [
+      {
+        "label": "Vexillum",
+        "uiTheme": "hc-black",
+        "path": "./themes/vexillum-color-theme.json"
+      }
+    ]
+  },
+  "license": "MIT"
+}

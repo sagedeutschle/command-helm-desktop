@@ -1,0 +1,65 @@
+{
+  "name": "helm-welcome",
+  "displayName": "Command Helm Welcome",
+  "description": "An original Command Desk for starting work and checking optional Helm capabilities.",
+  "version": "0.2.0",
+  "publisher": "command-helm",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:commandHelm.welcome.open"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "check": "node --check extension.js && node --check render.js"
+  },
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": {
+      "supported": true
+    }
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "commandHelm.welcome.open",
+        "title": "Command Helm: Open Command Desk"
+      }
+    ],
+    "configuration": {
+      "title": "Command Helm Welcome",
+      "properties": {
+        "commandHelm.welcome.openOnStartup": {
+          "type": "boolean",
+          "default": true,
+          "scope": "window",
+          "description": "Open the Command Desk once per profile for each welcome extension version."
+        }
+      }
+    },
+    "configurationDefaults": {
+      "workbench.colorTheme": "Vexillum",
+      "workbench.startupEditor": "none",
+      "commandHelm.welcome.openOnStartup": true,
+      "extensions.ignoreRecommendations": true,
+      "terminal.integrated.enableMultiLinePasteWarning": "always",
+      "git.autofetch": false,
+      "npm.fetchOnlinePackageInfo": false,
+      "typescript.disableAutomaticTypeAcquisition": true,
+      "editor.minimap.enabled": false,
+      "editor.guides.bracketPairs": "active",
+      "editor.linkedEditing": true,
+      "workbench.secondarySideBar.defaultVisibility": "hidden",
+      "terminal.integrated.tabs.enabled": true
+    }
+  }
+}
