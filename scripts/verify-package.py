@@ -16,6 +16,10 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 VERSION = '1.143.17232'
+NAME = 'Command Helm Preview'
+APPLICATION_NAME = 'command-helm-preview'
+IDENTIFIER = 'xyz.prismet.command-helm.preview'
+RELEASE = '0.1.0-preview.2'
 UPSTREAM_SHA256 = 'ade8f5e0ebf47e5ea9e2478844f150c68e43def192b6f8be05d0329d25ec0917'
 PRESERVED = {'out/main.js', 'out/vs/workbench/workbench.desktop.main.js',
              'LICENSE.txt', 'ThirdPartyNotices.txt'}
@@ -65,15 +69,15 @@ def verify(app):
     resources = contents / 'Resources'
     engine = resources / 'app'
     info = plistlib.loads((contents / 'Info.plist').read_bytes())
-    identity(info, 'Command Helm', 'xyz.prismet.command-helm')
+    identity(info, NAME, IDENTIFIER)
     require(info.get('CFBundleShortVersionString') == VERSION, 'Unexpected bundle engine version')
     schemes = [scheme for item in info.get('CFBundleURLTypes', [])
                for scheme in item.get('CFBundleURLSchemes', [])]
-    require(schemes == ['command-helm'], 'Unexpected URL handler')
-    require((contents / 'MacOS/Command Helm').is_file(), 'Missing main executable')
-    require((engine / 'bin/command-helm').is_file(), 'Missing Command Helm CLI')
+    require(schemes == [APPLICATION_NAME], 'Unexpected URL handler')
+    require((contents / 'MacOS' / NAME).is_file(), 'Missing main executable')
+    require((engine / 'bin' / APPLICATION_NAME).is_file(), 'Missing Command Helm Preview CLI')
     require(not (engine / 'bin/codium').exists(), 'Unrenamed CLI remains')
-    require(sha(resources / 'Command Helm.icns') == sha(ROOT / 'branding/command-helm.icns'),
+    require(sha(resources / (NAME + '.icns')) == sha(ROOT / 'branding/command-helm.icns'),
             'Branding differs from source')
 
     product = json.loads((engine / 'product.json').read_text())
@@ -83,7 +87,7 @@ def verify(app):
                 'Product overlay mismatch: ' + key)
 
     receipt = json.loads((resources / 'command-helm-package.json').read_text())
-    require(receipt.get('schema') == 1 and receipt.get('release') == '0.1.0-preview.1',
+    require(receipt.get('schema') == 1 and receipt.get('release') == RELEASE,
             'Unsupported package provenance')
     require(receipt.get('engineRebuilt') is False and receipt.get('engineVersion') == VERSION
             and product.get('version') == VERSION, 'Engine provenance mismatch')
@@ -131,10 +135,10 @@ def verify(app):
     require((resources / 'Command Helm Attribution.txt').is_file(), 'Missing attribution')
     for role, suffix in [('', '.helper'), (' (GPU)', '.helper.GPU'),
                          (' (Plugin)', '.helper.Plugin'), (' (Renderer)', '.helper.Renderer')]:
-        name = 'Command Helm Helper' + role
+        name = NAME + ' Helper' + role
         helper = contents / 'Frameworks' / (name + '.app')
         identity(plistlib.loads((helper / 'Contents/Info.plist').read_bytes()), name,
-                 'xyz.prismet.command-helm' + suffix)
+                 IDENTIFIER + suffix)
         require((helper / 'Contents/MacOS' / name).is_file(), 'Missing helper executable')
 
     subprocess.run(['/usr/bin/codesign', '--verify', '--deep', '--strict', str(app)],

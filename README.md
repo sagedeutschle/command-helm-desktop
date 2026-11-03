@@ -6,18 +6,22 @@ An independent VSCodium-based IDE with Command Desk, the Vexillum theme, and a t
 
 ## Install
 
-1. Download `Command-Helm-macOS-arm64-0.1.0-preview.1.zip` and `SHA256SUMS.txt` from the release. This build is for Apple Silicon Macs, macOS 12 or later. Intel Macs, Windows and Linux installers are not included.
-2. Verify the ZIP with `shasum -a 256` against the published checksum, then unzip it and move **Command Helm.app** to Applications.
-3. Open Command Helm. The first-run Command Desk opens a folder, a file, a terminal, or Tasks. Workspace Trust stays enabled.
+1. Download `Command-Helm-macOS-arm64-0.1.0-preview.2.zip` and `SHA256SUMS.txt` from the release. This build is for Apple Silicon Macs, macOS 12 or later. Intel Macs, Windows and Linux installers are not included.
+2. Verify the ZIP with `shasum -a 256` against the published checksum, then unzip it and move **Command Helm Preview.app** to Applications.
+3. Open Command Helm Preview. The first-run Command Desk opens a folder, a file, a terminal, or Tasks. Workspace Trust stays enabled.
 4. To use the phone and desktop together, follow [Connect your phone and computer](docs/CONNECT.md).
 
 **Preview signing:** this package is Apple Development signed, not Developer ID notarized. macOS can block first launch. Only if you trust this exact release, use Apple's per-app Open Anyway control in System Settings → Privacy & Security after trying to open it. Do not disable Gatekeeper. A notarized stable desktop release is still pending.
 
 The editor works without an AI account. Remote work requires your own private bridge; Codex work also requires your own installed, authenticated Codex CLI. Downloading the editor does not enroll computers or configure the phone automatically.
 
+Starting with `0.1.0-preview.2`, the public preview uses its own application identity and starts with a clean editor profile. On macOS, its settings, restored editors and webview cache live in `~/Library/Application Support/Command Helm Preview`; installed extensions live in `~/.command-helm-preview/extensions`. It does not import settings, extensions or sessions from another installation. Keep an existing **Command Helm.app** and its data in place when adding the preview. The preview CLI is `Contents/Resources/app/bin/command-helm-preview` inside the app bundle.
+
+The first preview used the same default profile as earlier private Command Helm installations on the same computer. Those existing users could therefore see their personal extensions and restored **Command Helm: War Room** tab in the downloaded app. These came from their existing local profile; the public package does not bundle the legacy War Room. Running different engines against that shared profile could leave webviews unable to load. The separate preview identity avoids that collision without clearing the existing profile or its cache. Explicit command-line or environment overrides can still select other data directories; use the preview's defaults to keep it separate.
+
 ## What is included
 
-- Current official VSCodium 1.143.17232 macOS arm64 engine, repackaged with Command Helm identity. The engine itself is not rebuilt or represented as original Helm code.
+- Current official VSCodium 1.143.17232 macOS arm64 engine, repackaged with Command Helm Preview identity. The engine itself is not rebuilt or represented as original Helm code.
 - Original Command Desk with project actions and phone setup/download links.
 - Original Vexillum theme and clean default settings.
 - Original Tasks console with configured device discovery, persistent retry identity, worker history, and reports. Optional local folder opening uses your explicit local device ID.
@@ -30,6 +34,7 @@ The packaging script verifies the official upstream archive SHA256, verifies its
 
 ```sh
 python3 scripts/build-macos.py --upstream-zip /path/to/VSCodium-darwin-arm64-1.143.17232.zip --output /path/to/new-output --identity 'YOUR EXISTING SIGNING IDENTITY'
+python3 -m unittest discover -s scripts -p 'test_*.py' -v
 node --test extensions/helm-welcome/test/*.test.js extensions/helm-tasks/test/*.test.js
 ```
 

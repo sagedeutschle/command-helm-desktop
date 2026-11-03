@@ -16,8 +16,10 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[1]
 VERSION = '1.143.17232'
 UPSTREAM_SHA256 = 'ade8f5e0ebf47e5ea9e2478844f150c68e43def192b6f8be05d0329d25ec0917'
-NAME = 'Command Helm'
-IDENTIFIER = 'xyz.prismet.command-helm'
+NAME = 'Command Helm Preview'
+APPLICATION_NAME = 'command-helm-preview'
+IDENTIFIER = 'xyz.prismet.command-helm.preview'
+RELEASE = '0.1.0-preview.2'
 
 def digest(path):
     h = hashlib.sha256()
@@ -67,13 +69,13 @@ def main():
     plist(info, {'CFBundleName': NAME, 'CFBundleDisplayName': NAME,
         'CFBundleExecutable': NAME, 'CFBundleIdentifier': IDENTIFIER,
         'CFBundleIconFile': NAME + '.icns', 'CFBundleIconName': NAME,
-        'CFBundleURLTypes': [{'CFBundleURLName': NAME, 'CFBundleURLSchemes': ['command-helm']}],
+        'CFBundleURLTypes': [{'CFBundleURLName': NAME, 'CFBundleURLSchemes': [APPLICATION_NAME]}],
         'NSHumanReadableCopyright': 'Command Helm additions © 2026 Sage Deutschle. Includes VSCodium, Code - OSS and other open-source software; see bundled notices.'})
     (app / 'Contents/MacOS/VSCodium').rename(app / ('Contents/MacOS/' + NAME))
     shutil.copyfile(ROOT / 'branding/command-helm.icns', resources / (NAME + '.icns'))
     cli = engine / 'bin/codium'
-    cli.write_text(cli.read_text().replace('VSCodium', NAME).replace("'codium'", "'command-helm'"))
-    cli.rename(engine / 'bin/command-helm')
+    cli.write_text(cli.read_text().replace('VSCodium', NAME).replace("'codium'", repr(APPLICATION_NAME)))
+    cli.rename(engine / 'bin' / APPLICATION_NAME)
     for role, suffix in [('', '.helper'), (' (GPU)', '.helper.GPU'), (' (Plugin)', '.helper.Plugin'), (' (Renderer)', '.helper.Renderer')]:
         old = 'VSCodium Helper' + role
         new = NAME + ' Helper' + role
@@ -106,7 +108,7 @@ def main():
     for file in sorted((engine / 'extensions').glob('*/package.json')):
         package = json.loads(file.read_text())
         inventory.append({'id': package.get('publisher', '') + '.' + package['name'], 'version': package['version'], 'license': package.get('license', 'See upstream notices')})
-    receipt = {'schema': 1, 'release': '0.1.0-preview.1', 'engineVersion': VERSION,
+    receipt = {'schema': 1, 'release': RELEASE, 'engineVersion': VERSION,
         'engineCommit': upstream.get('commit'), 'engineRebuilt': False,
         'upstreamURL': f'https://github.com/VSCodium/vscodium/releases/tag/{VERSION}',
         'upstreamArchiveSHA256': UPSTREAM_SHA256, 'preservedEngineFiles': preserved,
